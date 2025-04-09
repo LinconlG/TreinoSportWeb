@@ -1,0 +1,13 @@
+<div class="login-div">
+
+  <img src="assets/images/logo.png" alt="Logo" class="logo-img">
+
+  <div class="input-login">
+    <input type="text" placeholder="Usuario" [(ngModel)]="usuario" (keyup.enter)="login()">
+    <input type="password" placeholder="Senha" [(ngModel)]="senha" (keyup.enter)="login()">
+  </div>
+
+  <a href="#" class="esqueci-senha">Esqueci minha senha</a>
+  <button class="botao" (click)="login()">Login</button>
+  <button class="botao">Cadastrar</button>
+</div>
