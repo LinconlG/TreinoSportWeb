@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --fonte-principal: 'Segoe UI', sans-serif;;
+  --tamanho-padrao: 16px;
+}
+
+body {
+  font-family: var(--fonte-principal);
+  font-size: var(--tamanho-padrao);
+}

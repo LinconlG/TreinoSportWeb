@@ -34,6 +34,6 @@ export class LoginComponent {
   }
 
   cadastrar(){
-    //alterar para a tela
+    this.router.navigate(['/cadastro'])
   }
 }
