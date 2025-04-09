@@ -25,6 +25,7 @@ export class LoginComponent {
         this.router.navigate(['/home'])
       },
       error: (error) => {
+        console.log(error);
         this.snackBar.open('Usuário ou senha inválidos', 'Fechar', {
           duration: 5000,
           verticalPosition: 'top'
