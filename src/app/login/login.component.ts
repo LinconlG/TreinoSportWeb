@@ -34,7 +34,7 @@ export class LoginComponent {
     });
   }
 
-  cadastrar(){
+  cadastrarTela(){
     this.router.navigate(['/cadastro'])
   }
 }

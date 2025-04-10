@@ -16,13 +16,12 @@
       <input formControlName="senha" type="password" placeholder="Senha">
 
       <div *ngIf="form.get('mostrarInput')?.value">
-        <input formControlName="descricao" class="richText" type="text" placeholder="Descrição">
+        <textarea formControlName="descricao" class="richText" type="text" placeholder="Descrição"></textarea>
       </div>
     </div>
 
     <label class="label-voltar">Já possui uma conta? <a href="/login">Clique aqui</a></label>
 
-    <button class="botao">Cadastrar</button>
+    <button class="botao" (click)="cadastrar()">Cadastrar</button>
   </div>
 </form>
-
