@@ -19,7 +19,7 @@ export class CadastroComponent {
     email: '',
     senha: '',
     descricao: '',
-    IsCentroTreinamento: false
+    isCentroTreinamento: false
   }
 
   carregando = signal(false);
@@ -29,19 +29,18 @@ export class CadastroComponent {
 
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router, private snackBar: MatSnackBar) {
     this.form = this.fb.group({
-      mostrarInput: [false],
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       descricao: [''],
-      IsCentroTreinamento: [false]
+      isCentroTreinamento: [false]
     });
 
-    this.form.get('mostrarInput')?.valueChanges.subscribe(value => {
-      this.conta.IsCentroTreinamento = value;
+    this.form.get('isCentroTreinamento')?.valueChanges.subscribe(value => {
+      this.conta.isCentroTreinamento = value;
     });
 
-    this.form.get('mostrarInput')?.valueChanges.subscribe(mostrar => {//caso o valor do checkbox mude
+    this.form.get('isCentroTreinamento')?.valueChanges.subscribe(mostrar => {//caso o valor do checkbox mude
       const campo = this.form.get('campoAdicional');
       if (mostrar) {
         campo?.enable(); // Habilita o campo
@@ -66,7 +65,7 @@ export class CadastroComponent {
     this.conta.email = this.form.get('email')?.value;
     this.conta.senha = this.form.get('senha')?.value;
     this.conta.descricao = this.form.get('descricao')?.value;
-    this.conta.IsCentroTreinamento = this.form.get('IsCentroTreinamento')?.value;
+    this.conta.isCentroTreinamento = this.form.get('isCentroTreinamento')?.value;
 
     this.usuarioService.cadastrar(this.conta).subscribe({
       next: (response) => {

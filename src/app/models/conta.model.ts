@@ -4,5 +4,5 @@ export interface Conta{
   email: string;
   senha: string;
   descricao: string;
-  IsCentroTreinamento: boolean;
+  isCentroTreinamento: boolean;
 }

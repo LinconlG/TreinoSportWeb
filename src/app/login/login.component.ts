@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   usuario: string = '';
   senha: string = '';
+  private jwtHelper = new JwtHelperService();
 
   constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
@@ -22,7 +24,12 @@ export class LoginComponent {
     this.authService.login(this.usuario, this.senha).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        this.router.navigate(['/home'])
+        var tipo = this.getUserType();
+        if(tipo == 'CT'){
+          this.router.navigate(['/home/ct'])
+        } else if (tipo == 'Aluno') {
+          this.router.navigate(['/home/aluno']);
+        }
       },
       error: (error) => {
         console.log(error);
@@ -36,5 +43,27 @@ export class LoginComponent {
 
   cadastrarTela(){
     this.router.navigate(['/cadastro'])
+  }
+
+  getTokenClaims(): any {
+    const token = this.authService.getToken();
+    if (!token) return null;
+
+    try {
+      var claims = this.jwtHelper.decodeToken(token);
+      return this.jwtHelper.decodeToken(token);
+    } catch (error) {
+      console.error('Error decoding token', error);
+      return null;
+    }
+  }
+
+  getUserType(): string | null {
+    const claims = this.getTokenClaims();
+  if (claims.role) {
+    return claims.role as string;
+  }
+
+    return null;
   }
 }

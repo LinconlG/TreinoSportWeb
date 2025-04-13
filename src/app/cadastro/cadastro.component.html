@@ -4,7 +4,7 @@
     <img src="assets/images/logo.png" alt="Logo" class="logo-img">
 
     <div class="checkbox-div">
-      <input formControlName="mostrarInput" type="checkbox" class="checkbox">
+      <input formControlName="isCentroTreinamento" type="checkbox" class="checkbox">
       <label for="checkbox" class="label-checkbox">Criar conta para Centro de treinamento</label>
     </div>
 
@@ -15,7 +15,7 @@
       <input formControlName="email" type="email" placeholder="Email">
       <input formControlName="senha" type="password" placeholder="Senha">
 
-      <div *ngIf="form.get('mostrarInput')?.value">
+      <div *ngIf="form.get('isCentroTreinamento')?.value">
         <textarea formControlName="descricao" class="richText" type="text" placeholder="Descrição"></textarea>
       </div>
     </div>
