@@ -1,0 +1,80 @@
+/* Container principal - ocupa toda a altura da tela */
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+}
+
+/* Estilos do menu lateral */
+.sidenav {
+  width: 250px;   /* Largura fixa do menu */
+  background: #3f51b5;  /* Cor de fundo */
+  color: white;   /* Cor do texto */
+  box-shadow: 3px 0 6px rgba(0,0,0,0.24);  /* Sombra sutil */
+}
+
+/* Cabeçalho do menu */
+.sidenav-header {
+  padding: 1px;
+  background: rgba(0,0,0,0.2);  /* Fundo mais escuro para o cabeçalho */
+  text-align: center;
+  height: 50px;
+}
+
+/* Lista de navegação */
+.mat-nav-list {
+  padding-top: 0;  /* Remove padding padrão */
+}
+
+/* Links da navegação */
+.mat-nav-list a {
+  color: white;  /* Cor dos links */
+}
+
+/* Efeito hover nos links */
+.mat-nav-list a:hover {
+  background: rgba(255,255,255,0.1);  /* Efeito hover sutil */
+}
+
+/* Link ativo */
+.mat-nav-list a.active {
+  background: rgba(0,0,0,0.3);  /* Destaque para rota ativa */
+}
+
+/* Ícones dentro dos links */
+.mat-nav-list a mat-icon {
+  margin-right: 12px;  /* Espaço entre ícone e texto */
+}
+
+/* Área de conteúdo principal */
+.content {
+  padding: 24px;
+  height: calc(100vh - 64px);  /* Altura menos a toolbar */
+  overflow-y: auto;  /* Scroll se necessário */
+}
+
+/* Título na toolbar */
+.toolbar-title {
+  margin-left: 16px;  /* Espaço entre ícone e título */
+}
+
+.mat-toolbar{
+  background-color: #3f51b5;
+  color: white;  /* Cor da toolbar */
+  width: 98vw;  /* Largura da toolbar */
+}
+
+.menu-label{
+  display: flex;
+  justify-content: center;
+}
+
+/* Media query para mobile */
+@media (max-width: 600px) {
+  .content {
+    padding: 16px;  /* Menos padding em mobile */
+  }
+
+  .sidenav {
+    width: 200px;  /* Menu mais estreito em mobile */
+  }
+}

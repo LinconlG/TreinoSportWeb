@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { UserStateService } from '../services/user-state.service';
 
 @Component({
   selector: 'app-login',
@@ -18,13 +19,14 @@ export class LoginComponent {
   senha: string = '';
   private jwtHelper = new JwtHelperService();
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private userState: UserStateService) {}
 
   login(){
     this.authService.login(this.usuario, this.senha).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        var tipo = this.getUserType();
+        var tipo = this.getUserType() as "CT" | "Aluno";
+        this.userState.setUserType(tipo);
         if(tipo == 'CT'){
           this.router.navigate(['/home/ct'])
         } else if (tipo == 'Aluno') {
