@@ -4,12 +4,11 @@
     </div>
 
     <mat-nav-list>
-      <a mat-list-item
-         [routerLink]="homePath"
-         routerLinkActive="active"
-         (click)="isMobile() && sidenavOpen.set(false)">
-        <mat-icon class="menu-icon"></mat-icon>
-        <span class="menu-label">Início</span>
+      <a mat-list-item [routerLink]="homePath" routerLinkActive="active" (click)="isMobile() && sidenavOpen.set(false)">
+        <div class="menu-label">
+          <img class="menu-icon" src="assets/images/home.png"/>
+          <span class="menu-name">Página inicial</span>
+        </div>
       </a>
       <!-- Adicione mais itens aqui -->
     </mat-nav-list>

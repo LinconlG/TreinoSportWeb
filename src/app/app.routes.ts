@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './auth.guard';
-import { CadastroComponent } from './cadastro/cadastro.component';
-import { HomeCtComponent } from './home-ct/home-ct.component';
-import { HomeAlunoComponent } from './home-aluno/home-aluno.component';
-import { LateralMenuComponent } from './lateral-menu/lateral-menu.component';
+import { CadastroComponent } from './components/cadastro/cadastro.component';
+import { HomeCtComponent } from './components/home-ct/home-ct.component';
+import { HomeAlunoComponent } from './components/home-aluno/home-aluno.component';
+import { LateralMenuComponent } from './components/lateral-menu/lateral-menu.component';
 
 export const routes: Routes = [
   {

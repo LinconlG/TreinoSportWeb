@@ -7,7 +7,7 @@
 /* Estilos do menu lateral */
 .sidenav {
   width: 250px;   /* Largura fixa do menu */
-  background: #3f51b5;  /* Cor de fundo */
+  background: var(--cor-primaria-escuro);
   color: white;   /* Cor do texto */
   box-shadow: 3px 0 6px rgba(0,0,0,0.24);  /* Sombra sutil */
 }
@@ -58,14 +58,25 @@
 }
 
 .mat-toolbar{
-  background-color: #3f51b5;
+  background-color: var(--cor-primaria-escuro);
   color: white;  /* Cor da toolbar */
   width: 98vw;  /* Largura da toolbar */
+}
+
+.menu-icon{
+  width: 24px;  /* Largura do ícone */
+  height: 24px;  /* Altura do ícone */
+  justify-content: left;
 }
 
 .menu-label{
   display: flex;
   justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 10px;
+  background-color: var(--cor-primaria);
+  border-radius: 5px;
 }
 
 /* Media query para mobile */

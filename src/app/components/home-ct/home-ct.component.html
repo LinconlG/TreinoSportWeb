@@ -1,0 +1,22 @@
+<div class="container">
+  <!-- Estado de Carregamento (Spinner) -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando treinos...</p>
+  </div>
+
+  <!-- Estado de Erro -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+    <button (click)="carregarTreinos()" class="retry-button">Tentar novamente</button>
+  </div>
+
+  <!-- Estado de Sucesso (Lista de Treinos) -->
+  <div *ngIf="!isLoading && !errorMessage">
+    <div class="lista-treinos">
+      <div *ngFor="let treino of treinos" class="treino-card">
+        <div class="treino-nome">{{ treino.nome }}</div>
+      </div>
+    </div>
+  </div>
+</div>

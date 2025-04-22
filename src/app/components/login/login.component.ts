@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../auth.service';
 import { CommonModule } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserStateService } from '../services/user-state.service';
+import { UserStateService } from '../../services/user-state.service';
 
 @Component({
   selector: 'app-login',

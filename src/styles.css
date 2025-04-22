@@ -2,6 +2,8 @@
 :root {
   --fonte-principal: 'Segoe UI', sans-serif;;
   --tamanho-padrao: 16px;
+  --cor-primaria: #1e90ff; /* Azul */;
+  --cor-primaria-escuro: #344feb; /* Azul mais escuro */;
 }
 
 body {

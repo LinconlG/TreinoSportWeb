@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
-import { Conta } from '../models/conta.model';
+import { Conta } from '../../models/conta.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UsuarioService } from '../services/usuario/usuario.service';
+import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
