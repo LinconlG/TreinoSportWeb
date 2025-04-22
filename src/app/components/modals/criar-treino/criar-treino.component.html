@@ -1,1 +1,14 @@
-<p>criar-treino works!</p>
+<form [formGroup]="form">
+  <div class="principal">
+    <h3>Informações do treino</h3>
+    <label>
+      Nome do treino:
+      <input type="text" formControl="nome" />
+    </label>
+    <div class="botoes">
+      <button>Criar</button>
+      <button type="button" (click)="fechar()">Fechar</button>
+    </div>
+
+  </div>
+</form>

@@ -10,3 +10,26 @@ body {
   font-family: var(--fonte-principal);
   font-size: var(--tamanho-padrao);
 }
+
+input{
+  font-size: medium;
+  height: 25px;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button{
+  width: 200px;
+  max-width: 300px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  margin-bottom: 10px;
+  font-size:medium;
+  font-weight: bold;
+}

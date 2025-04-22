@@ -1,0 +1,18 @@
+.principal{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+  padding: 15px;
+}
+
+.botoes{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+  padding: 15px;
+  width: 150px;
+  gap: 20px;
+}
+

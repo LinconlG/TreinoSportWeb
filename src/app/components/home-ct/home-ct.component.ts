@@ -1,20 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Treino } from 'src/app/models/treino.model';
 import { TreinoService } from 'src/app/services/treino/treino.service';
-
+import { DialogService } from 'src/app/services/dialog.service';
 @Component({
   selector: 'app-home-ct',
   imports: [CommonModule],
   templateUrl: './home-ct.component.html',
   styleUrl: './home-ct.component.css'
 })
+
+
 export class HomeCtComponent implements OnInit {
   treinos: Treino[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
-
-  constructor(private treinoService: TreinoService) {}
+  constructor(private treinoService: TreinoService, private dialogService: DialogService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.carregarTreinos();// Quando o componente inicia, carrega os treinos
@@ -36,4 +38,26 @@ export class HomeCtComponent implements OnInit {
       }
     });
   }
+
+  private criarTreino(): void {
+    this.dialogService.abrirModalCriarTreino().subscribe({
+      next: (criado: boolean) => {
+        if (criado) {
+          this.carregarTreinos(); // Recarrega os treinos após criar um novo
+        }
+      },
+      error: (error) => {
+        this.onErro(error); // Chama o método de erro
+      }
+    });
+  }
+
+  private onErro(erro: any) {
+    console.error('Erro no modal:', erro);
+    this.snackBar.open('Erro ao criar treino', 'Fechar', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
+
 }
