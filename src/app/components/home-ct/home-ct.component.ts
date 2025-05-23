@@ -22,7 +22,7 @@ export class HomeCtComponent implements OnInit {
     this.carregarTreinos();// Quando o componente inicia, carrega os treinos
   }
 
-  private carregarTreinos(): void {
+  carregarTreinos(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
@@ -39,7 +39,7 @@ export class HomeCtComponent implements OnInit {
     });
   }
 
-  private criarTreino(): void {
+  criarTreino(): void {
     this.dialogService.abrirModalCriarTreino().subscribe({
       next: (criado: boolean) => {
         if (criado) {
