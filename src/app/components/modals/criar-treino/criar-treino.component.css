@@ -16,3 +16,18 @@
   gap: 20px;
 }
 
+label{
+  display: flex;
+  justify-content: center;
+}
+
+.subtitulo{
+  font-size: 12px;
+  font-weight: bold;
+  color: gray;
+}
+
+.limite{
+  display: flex;
+  justify-content: center;
+}

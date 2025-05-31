@@ -33,3 +33,13 @@ button{
   font-size:medium;
   font-weight: bold;
 }
+
+.dropselect-global{
+  background-color: white;
+}
+
+.descricao-global{
+  background-color: white;
+  height: 100px;
+  margin: 5px;
+}

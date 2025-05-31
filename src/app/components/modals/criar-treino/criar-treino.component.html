@@ -1,10 +1,29 @@
 <form [formGroup]="form">
   <div class="principal">
     <h3>Informações do treino</h3>
-    <label>
-      Nome do treino:
-      <input type="text" formControlName="nome" />
-    </label>
+    <mat-form-field>
+      <mat-label>Modalidade</mat-label>
+      <mat-select>
+        <div class="dropselect-global">
+          <mat-option *ngFor="let modalidade of modalidades" [value]="modalidade">
+            {{getNomeModalidade(modalidade)}}
+          </mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
+    <textarea class="descricao-global" placeholder="Descrição do treino" formControlName="descricao"></textarea>
+
+      <label style="font-weight: bold;">Limite de alunos presentes</label>
+      <label class="subtitulo">Limite de presença em um único horário</label>
+
+
+      <div class="limite">
+            <input type="number" style="width: 50px;">
+      </div>
+
+
+
     <div class="botoes">
       <button>Criar</button>
       <button type="button" (click)="fechar()">Fechar</button>
