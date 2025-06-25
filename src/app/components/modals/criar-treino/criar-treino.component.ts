@@ -1,6 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +9,11 @@ import { timer } from 'rxjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Modalidade } from '../../../shared/enums/modalidade';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-criar-treino',
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatIconModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
   templateUrl: './criar-treino.component.html',
   styleUrl: './criar-treino.component.css'
 })
@@ -21,6 +21,18 @@ export class CriarTreinoComponent {
   form: FormGroup;
   Modalidade = Modalidade;
   modalidades = Object.values(Modalidade);
+  diasDisponiveis = signal<string[]>([
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+    'Domingo'
+  ]);
+
+  diasSelecionados = signal<string[]>([]);
+  diaSelecionadoControl = new FormControl<string | null>(null);
   selectedModalidade: Modalidade | null = null;
 
   getNomeModalidade(modalidade: Modalidade): string {
@@ -40,6 +52,42 @@ export class CriarTreinoComponent {
       [Modalidade.VOLEI]: 'Vôlei'
     };
     return nomes[modalidade] || modalidade;
+  }
+
+  getNomeDiasSemana(diaSemana: string): string {
+    const nomes = {
+      'Segunda-feira': 'Segunda-feira',
+      'Terça-feira': 'Terça-feira',
+      'Quarta-feira': 'Quarta-feira',
+      'Quinta-feira': 'Quinta-feira',
+      'Sexta-feira': 'Sexta-feira',
+      'Sábado': 'Sábado',
+      'Domingo': 'Domingo'
+    };
+    return nomes[diaSemana] || diaSemana;
+  }
+
+  getNomeDia(dia: string): string {
+    return dia;
+  }
+
+  adicionarDia(){
+    const diaSelecionado = this.diaSelecionadoControl.value;
+
+    if(diaSelecionado){
+      this.diasSelecionados.update(dias => [...dias, diaSelecionado]);
+
+      this.diasDisponiveis.update(dias => dias.filter(dia => dia !== diaSelecionado));
+    }
+
+    this.diaSelecionadoControl.reset();
+  }
+
+  removerDia(diaRemovido: string) {
+
+    this.diasSelecionados.update(dias => dias.filter(dia => dia !== diaRemovido));
+    this.diasDisponiveis.update(dias => [...dias, diaRemovido]);
+
   }
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) {

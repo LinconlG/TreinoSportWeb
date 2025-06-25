@@ -31,3 +31,51 @@ label{
   display: flex;
   justify-content: center;
 }
+
+.dias-selecionados {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dia-card {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  padding: 8px 8px;
+  border-radius: 16px;
+  border-style: solid;
+  width: 100%;
+}
+
+.dia-card-button {
+  font-size: 15px;
+  color: white;
+  background-color: red;
+  border-radius: 5px;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dia-card-span {
+  font-size: 15px;
+  border-radius: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.dia-card-horarios{
+  background-color: yellowgreen;
+  border-radius: 4px;
+  width: 100%;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+}
