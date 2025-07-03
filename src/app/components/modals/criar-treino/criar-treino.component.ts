@@ -10,7 +10,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Modalidade } from '../../../shared/enums/modalidade';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-
+import { DiasSemana } from 'src/app/shared/enums/diasSemana';
+import { D } from 'node_modules/@angular/common/common_module.d-Qx8B6pmN';
 @Component({
   selector: 'app-criar-treino',
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatIconModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
@@ -21,18 +22,20 @@ export class CriarTreinoComponent {
   form: FormGroup;
   Modalidade = Modalidade;
   modalidades = Object.values(Modalidade);
-  diasDisponiveis = signal<string[]>([
-    'Segunda-feira',
-    'Terça-feira',
-    'Quarta-feira',
-    'Quinta-feira',
-    'Sexta-feira',
-    'Sábado',
-    'Domingo'
-  ]);
+  diasOrdenados = [
+    { numero: 1, nome: DiasSemana.SEGUNDA },
+    { numero: 2, nome: DiasSemana.TERCA },
+    { numero: 3, nome: DiasSemana.QUARTA },
+    { numero: 4, nome: DiasSemana.QUINTA },
+    { numero: 5, nome: DiasSemana.SEXTA },
+    { numero: 6, nome: DiasSemana.SABADO },
+    { numero: 7, nome: DiasSemana.DOMINGO }
+  ]
+  diasDisponiveis = signal(this.diasOrdenados.map(dia => dia));
 
-  diasSelecionados = signal<string[]>([]);
-  diaSelecionadoControl = new FormControl<string | null>(null);
+  diasSelecionados = signal<{ numero:number, nome:string }[]>([]);
+
+  diaSelecionadoControl = new FormControl<{numero:number, nome:string} | null>(null);
   selectedModalidade: Modalidade | null = null;
 
   getNomeModalidade(modalidade: Modalidade): string {
@@ -54,39 +57,22 @@ export class CriarTreinoComponent {
     return nomes[modalidade] || modalidade;
   }
 
-  getNomeDiasSemana(diaSemana: string): string {
-    const nomes = {
-      'Segunda-feira': 'Segunda-feira',
-      'Terça-feira': 'Terça-feira',
-      'Quarta-feira': 'Quarta-feira',
-      'Quinta-feira': 'Quinta-feira',
-      'Sexta-feira': 'Sexta-feira',
-      'Sábado': 'Sábado',
-      'Domingo': 'Domingo'
-    };
-    return nomes[diaSemana] || diaSemana;
-  }
-
-  getNomeDia(dia: string): string {
-    return dia;
-  }
-
   adicionarDia(){
     const diaSelecionado = this.diaSelecionadoControl.value;
 
     if(diaSelecionado){
       this.diasSelecionados.update(dias => [...dias, diaSelecionado]);
 
-      this.diasDisponiveis.update(dias => dias.filter(dia => dia !== diaSelecionado));
+      this.diasDisponiveis.update(dias => dias.filter(dia => dia.numero !== diaSelecionado.numero));
     }
 
     this.diaSelecionadoControl.reset();
   }
 
   removerDia(diaRemovido: string) {
-
-    this.diasSelecionados.update(dias => dias.filter(dia => dia !== diaRemovido));
-    this.diasDisponiveis.update(dias => [...dias, diaRemovido]);
+    var diaRemovidoObj = this.diasOrdenados.find(dia => dia.nome === diaRemovido);
+    this.diasSelecionados.update(dias => dias.filter(dia => dia.numero !== diaRemovidoObj.numero));
+    this.diasDisponiveis.update(dias => [...dias, diaRemovidoObj].sort((a, b) => a.numero - b.numero));
 
   }
 

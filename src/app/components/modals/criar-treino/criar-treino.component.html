@@ -27,7 +27,7 @@
       <mat-select [formControl]="diaSelecionadoControl" (selectionChange)="adicionarDia()">
         <div class="dropselect-global">
           <mat-option *ngFor="let dia of diasDisponiveis()" [value]="dia">
-            {{getNomeDia(dia)}}
+            {{dia.nome}}
           </mat-option>
         </div>
       </mat-select>
@@ -38,11 +38,11 @@
         <div class="dia-card">
 
           <div class="dia-card-span">
-            <span>{{getNomeDia(dia)}}</span>
+            <span>{{dia.nome}}</span>
           </div>
 
           <div>
-            <button class="dia-card-button" mat-icon-button (click)="removerDia(dia)">
+            <button class="dia-card-button" mat-icon-button (click)="removerDia(dia.nome)">
               Remover
             </button>
           </div>
