@@ -71,7 +71,7 @@ label{
   font-weight: bold;
 }
 
-.dia-card-horarios{
+.dia-card-dia{
   border-radius: 4px;
   width: 100%;
   grid-column: 1 / -1;
@@ -88,4 +88,18 @@ label{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.dia-card-horarios{
+  border-radius: 4px;
+  display: grid;
+  justify-content: center;
+  gap: 15px;
+  grid-template-columns: auto auto auto;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.dia-card-horario{
+
 }
