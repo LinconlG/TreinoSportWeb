@@ -22,20 +22,6 @@ export class CriarTreinoComponent {
   form: FormGroup;
   Modalidade = Modalidade;
   modalidades = Object.values(Modalidade);
-  diasOrdenados = [
-    { numero: 1, nome: DiasSemana.SEGUNDA },
-    { numero: 2, nome: DiasSemana.TERCA },
-    { numero: 3, nome: DiasSemana.QUARTA },
-    { numero: 4, nome: DiasSemana.QUINTA },
-    { numero: 5, nome: DiasSemana.SEXTA },
-    { numero: 6, nome: DiasSemana.SABADO },
-    { numero: 7, nome: DiasSemana.DOMINGO }
-  ]
-  diasDisponiveis = signal(this.diasOrdenados.map(dia => dia));
-
-  diasSelecionados = signal<{ numero:number, nome:string }[]>([]);
-
-  diaSelecionadoControl = new FormControl<{numero:number, nome:string} | null>(null);
   selectedModalidade: Modalidade | null = null;
 
   getNomeModalidade(modalidade: Modalidade): string {
@@ -56,6 +42,21 @@ export class CriarTreinoComponent {
     };
     return nomes[modalidade] || modalidade;
   }
+  // Lógica para dias da semana ------------------
+  diasOrdenados = [
+    { numero: 1, nome: DiasSemana.SEGUNDA },
+    { numero: 2, nome: DiasSemana.TERCA },
+    { numero: 3, nome: DiasSemana.QUARTA },
+    { numero: 4, nome: DiasSemana.QUINTA },
+    { numero: 5, nome: DiasSemana.SEXTA },
+    { numero: 6, nome: DiasSemana.SABADO },
+    { numero: 7, nome: DiasSemana.DOMINGO }
+  ]
+  diasDisponiveis = signal(this.diasOrdenados.map(dia => dia));
+
+  diasSelecionados = signal<{ numero:number, nome:string }[]>([]);
+
+  diaSelecionadoControl = new FormControl<{numero:number, nome:string} | null>(null);
 
   adicionarDia(){
     const diaSelecionado = this.diaSelecionadoControl.value;
@@ -75,7 +76,8 @@ export class CriarTreinoComponent {
     this.diasDisponiveis.update(dias => [...dias, diaRemovidoObj].sort((a, b) => a.numero - b.numero));
 
   }
-
+  //--------------------------------------------------------------
+  // Lógica para criação do treino ou fechar modal------------------
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) {
     this.form = this.fb.group({
       nome: ['', Validators.required],

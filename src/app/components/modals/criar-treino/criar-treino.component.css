@@ -72,10 +72,20 @@ label{
 }
 
 .dia-card-horarios{
-  background-color: yellowgreen;
   border-radius: 4px;
   width: 100%;
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
+  gap: 15px;
+}
+
+.button-horario{
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
