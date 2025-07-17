@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { DiasSemana } from 'src/app/shared/enums/diasSemana';
 import { D } from 'node_modules/@angular/common/common_module.d-Qx8B6pmN';
+import { DataHorario } from 'src/app/models/dataHorario';
+import { Horario } from 'src/app/models/horario';
 @Component({
   selector: 'app-criar-treino',
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatIconModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
@@ -23,6 +25,7 @@ export class CriarTreinoComponent {
   Modalidade = Modalidade;
   modalidades = Object.values(Modalidade);
   selectedModalidade: Modalidade | null = null;
+  horaSelecionada: string;
 
   getNomeModalidade(modalidade: Modalidade): string {
     const nomes = {
@@ -43,7 +46,7 @@ export class CriarTreinoComponent {
     return nomes[modalidade] || modalidade;
   }
   // Lógica para dias da semana ------------------
-  diasOrdenados = [
+  diasOrdenados: Array<{ numero: number, nome: DiasSemana }> = [
     { numero: 1, nome: DiasSemana.SEGUNDA },
     { numero: 2, nome: DiasSemana.TERCA },
     { numero: 3, nome: DiasSemana.QUARTA },
@@ -54,15 +57,25 @@ export class CriarTreinoComponent {
   ]
   diasDisponiveis = signal(this.diasOrdenados.map(dia => dia));
 
-  diasSelecionados = signal<{ numero:number, nome:string }[]>([]);
+  diasSelecionados = signal<{ numero:number, dataHorario:DataHorario }[]>([]);
 
-  diaSelecionadoControl = new FormControl<{numero:number, nome:string} | null>(null);
+  diaSelecionadoControl = new FormControl<{numero:number, nome:DiasSemana} | null>(null);
 
   adicionarDia(){
     const diaSelecionado = this.diaSelecionadoControl.value;
 
     if(diaSelecionado){
-      this.diasSelecionados.update(dias => [...dias, diaSelecionado]);
+
+      const novaDataHorario: DataHorario = {
+        dia: diaSelecionado.nome,
+        horarios: []
+      };
+      const selecionado = {
+        numero: diaSelecionado.numero,
+        dataHorario: novaDataHorario
+      }
+
+      this.diasSelecionados.update(dias => [...dias, selecionado]);
 
       this.diasDisponiveis.update(dias => dias.filter(dia => dia.numero !== diaSelecionado.numero));
     }
@@ -76,7 +89,33 @@ export class CriarTreinoComponent {
     this.diasDisponiveis.update(dias => [...dias, diaRemovidoObj].sort((a, b) => a.numero - b.numero));
 
   }
+
+  onTimeChange(event: Event, data: DataHorario) {
+    const input = event.target as HTMLInputElement;
+    const horaString = input.value; // Formato "HH:MM"
+    console.log('Hora selecionada:', horaString);
+
+    // Converter string para Date
+    const [hours, minutes] = horaString.split(':').map(Number);
+    const horaDate = new Date();
+    horaDate.setHours(hours, minutes, 0, 0); // Configura apenas hora e minuto
+
+    const horario: Horario = {
+      codigo: data.horarios.length + 1,
+      hora: horaDate,
+      alunosPresentes: []
+    };
+
+    data.horarios.push(horario)
+  }
+
+  onClickRemoverHorario(data: DataHorario){
+    data.horarios.pop();
+  }
   //--------------------------------------------------------------
+
+  //fazer model de dataTreino? para adicionar a lista de horarios
+
   // Lógica para criação do treino ou fechar modal------------------
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) {
     this.form = this.fb.group({
