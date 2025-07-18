@@ -1,9 +1,9 @@
-<form [formGroup]="form">
+<form>
   <div class="principal">
     <h3>Informações do treino</h3>
     <mat-form-field>
       <mat-label>Modalidade</mat-label>
-      <mat-select>
+      <mat-select [formControl]="modalidadeSelecionadoControl">
         <div class="dropselect-global">
           <mat-option *ngFor="let modalidade of modalidades" [value]="modalidade">
             {{getNomeModalidade(modalidade)}}
@@ -12,14 +12,14 @@
       </mat-select>
     </mat-form-field>
 
-    <textarea class="descricao-global" placeholder="Descrição do treino" formControlName="descricao"></textarea>
+    <textarea class="descricao-global" placeholder="Descrição do treino" matInput [formControl]="descricaoControl"></textarea>
 
     <label style="font-weight: bold;">Limite de alunos presentes</label>
     <label class="subtitulo">Limite de presença em um único horário</label>
 
 
     <div class="limite">
-            <input type="number" style="width: 50px;">
+            <input matInput [formControl]="limiteControl" type="number" style="width: 50px;">
     </div>
 
     <mat-form-field>
@@ -38,17 +38,17 @@
         <div class="dia-card">
 
           <div class="dia-card-span">
-            <span>{{diaSel.dataHorario.dia}}</span>
+            <span>{{diaSel.dataHorario.diaExibicao}}</span>
           </div>
 
           <div>
-            <button class="dia-card-button" mat-icon-button (click)="removerDia(diaSel.dataHorario.dia)">
+            <button class="dia-card-button" mat-icon-button (click)="removerDia(diaSel.dataHorario.diaExibicao, $event)">
               Remover
             </button>
           </div>
 
           <div class="dia-card-dia">
-            <button (click)="onClickRemoverHorario(diaSel.dataHorario)" class="button-horario" style="background-color: red;">-</button>
+            <button (click)="onClickRemoverHorario(diaSel.dataHorario, $event)" class="button-horario" style="background-color: red;">-</button>
             <label class="botao-circular" style="background-color: rgb(0, 160, 0);">
               <span>+</span>
               <input type="time" (change)="onTimeChange($event, diaSel.dataHorario)" />
@@ -66,7 +66,7 @@
     </div>
 
     <div class="botoes">
-      <button>Criar</button>
+      <button (click)="criarTreino()">Criar</button>
       <button type="button" (click)="fechar()">Fechar</button>
     </div>
 

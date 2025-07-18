@@ -14,6 +14,12 @@ import { DiasSemana } from 'src/app/shared/enums/diasSemana';
 import { D } from 'node_modules/@angular/common/common_module.d-Qx8B6pmN';
 import { DataHorario } from 'src/app/models/dataHorario';
 import { Horario } from 'src/app/models/horario';
+import { Treino } from 'src/app/models/treino.model';
+import { Conta } from 'src/app/models/conta.model';
+import { TreinoService } from 'src/app/services/treino/treino.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+
 @Component({
   selector: 'app-criar-treino',
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatIconModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
@@ -22,10 +28,13 @@ import { Horario } from 'src/app/models/horario';
 })
 export class CriarTreinoComponent {
   form: FormGroup;
-  Modalidade = Modalidade;
   modalidades = Object.values(Modalidade);
   selectedModalidade: Modalidade | null = null;
   horaSelecionada: string;
+
+  modalidadeSelecionadoControl = new FormControl< Modalidade | null>(null);
+  descricaoControl = new FormControl< string | null>(null);
+  limiteControl = new FormControl< number | null>(null);
 
   getNomeModalidade(modalidade: Modalidade): string {
     const nomes = {
@@ -43,23 +52,23 @@ export class CriarTreinoComponent {
       [Modalidade.TENIS]: 'Tênis',
       [Modalidade.VOLEI]: 'Vôlei'
     };
-    return nomes[modalidade] || modalidade;
+    return nomes[modalidade];
   }
   // Lógica para dias da semana ------------------
   diasOrdenados: Array<{ numero: number, nome: DiasSemana }> = [
+    { numero: 0, nome: DiasSemana.DOMINGO },
     { numero: 1, nome: DiasSemana.SEGUNDA },
     { numero: 2, nome: DiasSemana.TERCA },
     { numero: 3, nome: DiasSemana.QUARTA },
     { numero: 4, nome: DiasSemana.QUINTA },
     { numero: 5, nome: DiasSemana.SEXTA },
-    { numero: 6, nome: DiasSemana.SABADO },
-    { numero: 7, nome: DiasSemana.DOMINGO }
+    { numero: 6, nome: DiasSemana.SABADO }
   ]
   diasDisponiveis = signal(this.diasOrdenados.map(dia => dia));
 
   diasSelecionados = signal<{ numero:number, dataHorario:DataHorario }[]>([]);
 
-  diaSelecionadoControl = new FormControl<{numero:number, nome:DiasSemana} | null>(null);
+  diaSelecionadoControl = new FormControl<{numero:number, nome: string} | null>(null);
 
   adicionarDia(){
     const diaSelecionado = this.diaSelecionadoControl.value;
@@ -67,7 +76,8 @@ export class CriarTreinoComponent {
     if(diaSelecionado){
 
       const novaDataHorario: DataHorario = {
-        dia: diaSelecionado.nome,
+        diaExibicao: diaSelecionado.nome,
+        dia: diaSelecionado.numero,
         horarios: []
       };
       const selecionado = {
@@ -83,11 +93,23 @@ export class CriarTreinoComponent {
     this.diaSelecionadoControl.reset();
   }
 
-  removerDia(diaRemovido: string) {
-    var diaRemovidoObj = this.diasOrdenados.find(dia => dia.nome === diaRemovido);
-    this.diasSelecionados.update(dias => dias.filter(dia => dia.numero !== diaRemovidoObj.numero));
-    this.diasDisponiveis.update(dias => [...dias, diaRemovidoObj].sort((a, b) => a.numero - b.numero));
+  previnirPropagation(event: Event){
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
 
+  removerDia(diaRemovido: string, event?: Event) {
+    try {
+      this.previnirPropagation(event);
+      var diaRemovidoObj = this.diasOrdenados.find(dia => dia.nome === diaRemovido);
+      this.diasSelecionados.update(dias => dias.filter(dia => dia.numero !== diaRemovidoObj.numero));
+      this.diasDisponiveis.update(dias => [...dias, diaRemovidoObj].sort((a, b) => a.numero - b.numero));
+    } catch (e) {
+      console.error('Erro interno na modal:', e);
+      this.snackBar.open('Erro interno. Tente novamente.', 'Fechar', { duration: 3000 });
+    }
   }
 
   onTimeChange(event: Event, data: DataHorario) {
@@ -109,29 +131,29 @@ export class CriarTreinoComponent {
     data.horarios.push(horario)
   }
 
-  onClickRemoverHorario(data: DataHorario){
+  onClickRemoverHorario(data: DataHorario, event: Event){
+    this.previnirPropagation(event)
     data.horarios.pop();
   }
   //--------------------------------------------------------------
 
-  //fazer model de dataTreino? para adicionar a lista de horarios
-
   // Lógica para criação do treino ou fechar modal------------------
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) {
-    this.form = this.fb.group({
-      nome: ['', Validators.required],
-      descricao: ['', Validators.required],
-      dataInicio: ['', Validators.required],
-    });
-  }
+  constructor(private treinoService: TreinoService, private snackBar: MatSnackBar, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) { }
 
   criarTreino() {
-    if(this.form.valid) {
-      const treino = this.form.value;
-      // Aqui você pode fazer o que quiser com os dados do treino, como enviar para um serviço ou API
-      console.log('Treino criado:', treino);
-      this.fechar();
+
+    const treino: Treino = {
+        nome: this.modalidadeSelecionadoControl.value,
+        descricao: this.descricaoControl.value,
+        alunos: [],
+        datasTreinos: this.diasSelecionados().map(item => item.dataHorario),
+        modalidade: this.modalidadeSelecionadoControl.value,
+        limiteAlunos: this.limiteControl.value
     }
+
+    const overlayContainer = this.overlayContainer.getContainerElement();
+    overlayContainer.innerHTML = '';
+    this.dialogRef.close(treino)
   }
 
   fechar() {

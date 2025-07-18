@@ -15,8 +15,7 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`,
        { email, senha },
       {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
+        headers: { 'Content-Type': 'application/json' }
       });
   }
 

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CriarTreinoComponent } from '../components/modals/criar-treino/criar-treino.component';
+import { Observable } from 'rxjs';
+import { Treino } from '../models/treino.model';
 
 
 @Injectable({
@@ -10,7 +12,7 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  abrirModalCriarTreino() {
+  abrirModalCriarTreino(): Observable<Treino> {
     return this.dialog.open(CriarTreinoComponent, {
       width: '60vw',
       maxWidth: '60vw',

@@ -41,8 +41,9 @@ export class HomeCtComponent implements OnInit {
 
   criarTreino(): void {
     this.dialogService.abrirModalCriarTreino().subscribe({
-      next: (criado: boolean) => {
-        if (criado) {
+      next: (treino: Treino) => {
+        if (treino) {
+          this.requisicaoCriarTreino(treino);
           this.carregarTreinos(); // Recarrega os treinos após criar um novo
         }
       },
@@ -50,6 +51,24 @@ export class HomeCtComponent implements OnInit {
         this.onErro(error); // Chama o método de erro
       }
     });
+  }
+
+  requisicaoCriarTreino(treino: Treino){
+    this.treinoService.createTreino(treino).subscribe({
+        next: () => {
+          this.snackBar.open('Criado com sucesso', 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
+        },
+        error: (error) => {
+          console.log(error);
+          this.snackBar.open('Erro' + `${error}`, 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
+        }
+      });
   }
 
   private onErro(erro: any) {

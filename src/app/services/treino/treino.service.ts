@@ -11,24 +11,27 @@ import { AuthService } from "../../auth.service";
 
 export class TreinoService {
   private apiUrl = environment.apiUrl + "/treino";
+  private token: string;
+  private headers: HttpHeaders;
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) {
+    this.token = this.authService.getToken();
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`
+    });
+  }
+
+
 
   getTreinos(): Observable<Treino[]> {
     // 1. Define os queryParams
     //const params = new HttpParams().set('codigoCT', codigoCT);
-    const token = this.authService.getToken();
 
-    // 2. Define os headers (com token)
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    // 3. Faz a requisição com as opções
+    // 2. Faz a requisição com as opções
     return this.http.get<Treino[]>(
       `${this.apiUrl}/ct/todos`,
       {
-        headers  // Envia o token no header
+        headers: this.headers  // Envia o token no header
       }
     );
   }
@@ -37,7 +40,14 @@ export class TreinoService {
     return this.http.get<Treino>(`${this.apiUrl}/${id}`);
   }
 
-  createTreino(treino: Treino): Observable<Treino> {
-    return this.http.post<Treino>(this.apiUrl, treino);
+  createTreino(treino: Treino): Observable<void> {
+    console.log(this.token);
+    console.log(treino);
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<void>(`${this.apiUrl}/ct/criar`, treino, { headers: headers });
   }
 }

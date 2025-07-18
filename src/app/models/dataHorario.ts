@@ -2,6 +2,7 @@ import { DiasSemana } from "../shared/enums/diasSemana";
 import { Horario } from "./horario";
 
 export interface DataHorario{
-  dia: DiasSemana;
+  diaExibicao: string;
+  dia: number;
   horarios: Horario[]
 }
