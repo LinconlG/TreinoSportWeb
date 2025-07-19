@@ -47,7 +47,6 @@ export class HomeCtComponent implements OnInit {
       next: (treino: Treino) => {
         if (treino) {
           this.requisicaoCriarTreino(treino);
-          this.carregarTreinos(); // Recarrega os treinos após criar um novo
         }
       },
       error: (error) => {
@@ -59,15 +58,12 @@ export class HomeCtComponent implements OnInit {
   requisicaoCriarTreino(treino: Treino){
     this.treinoService.createTreino(treino).subscribe({
         next: () => {
-          this.snackBar.open('Criado com sucesso', 'Fechar', {
-            duration: 5000,
-            verticalPosition: 'top'
-          });
+          this.carregarTreinos();
         },
         error: (error) => {
           console.log(error);
           this.snackBar.open('Erro' + `${error}`, 'Fechar', {
-            duration: 5000,
+            duration: 1000,
             verticalPosition: 'top'
           });
         }
