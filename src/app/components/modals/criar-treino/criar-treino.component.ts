@@ -5,18 +5,14 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { timer } from 'rxjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Modalidade } from '../../../shared/enums/modalidade';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { DiasSemana } from 'src/app/shared/enums/diasSemana';
-import { D } from 'node_modules/@angular/common/common_module.d-Qx8B6pmN';
 import { DataHorario } from 'src/app/models/dataHorario';
 import { Horario } from 'src/app/models/horario';
 import { Treino } from 'src/app/models/treino.model';
-import { Conta } from 'src/app/models/conta.model';
-import { TreinoService } from 'src/app/services/treino/treino.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -27,30 +23,39 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './criar-treino.component.css'
 })
 export class CriarTreinoComponent {
-  form: FormGroup;
-  modalidades = Object.values(Modalidade);
-  selectedModalidade: Modalidade | null = null;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public modalidadesCriadas: Modalidade[], private snackBar: MatSnackBar, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) { }
+
   horaSelecionada: string;
 
+  modalidades = Object.values(Modalidade);
+  selectedModalidade: Modalidade | null = null;
+  modalidadesRestantes: Modalidade[];
   modalidadeSelecionadoControl = new FormControl< Modalidade | null>(null);
   descricaoControl = new FormControl< string | null>(null);
   limiteControl = new FormControl< number | null>(null);
 
+  ngOnInit(): void {
+    this.modalidadesRestantes = this.modalidades.filter(
+      m => !this.modalidadesCriadas.includes(m)
+    );
+  }
+
   getNomeModalidade(modalidade: Modalidade): string {
     const nomes = {
-      [Modalidade.BEACHTENNIS]: 'Beach Tennis',
-      [Modalidade.DANCA]: 'Dança',
-      [Modalidade.FUNCIONAL]: 'Funcional',
-      [Modalidade.FUTEBOL]: 'Futebol',
-      [Modalidade.FUTSAL]: 'Futsal',
-      [Modalidade.FUTVOLEI]: 'Futvôlei',
-      [Modalidade.GINASTICA]: 'Ginástica',
-      [Modalidade.JIUJITSU]: 'Jiu Jitsu',
-      [Modalidade.MUAITHAI]: 'Muay Thai',
-      [Modalidade.NATAÇÃO]: 'Natação',
-      [Modalidade.PILATES]: 'Pilates',
-      [Modalidade.TENIS]: 'Tênis',
-      [Modalidade.VOLEI]: 'Vôlei'
+      [Modalidade.BeachTennis]: 'Beach Tennis',
+      [Modalidade.Danca]: 'Dança',
+      [Modalidade.Funcional]: 'Funcional',
+      [Modalidade.Futebol]: 'Futebol',
+      [Modalidade.Futsal]: 'Futsal',
+      [Modalidade.Futevolei]: 'Futevôlei',
+      [Modalidade.Ginastica]: 'Ginástica',
+      [Modalidade.JiuJitsu]: 'Jiu Jitsu',
+      [Modalidade.MuaiThai]: 'Muay Thai',
+      [Modalidade.Natacao]: 'Natação',
+      [Modalidade.Pilates]: 'Pilates',
+      [Modalidade.Tenis]: 'Tênis',
+      [Modalidade.Volei]: 'Vôlei'
     };
     return nomes[modalidade];
   }
@@ -138,12 +143,12 @@ export class CriarTreinoComponent {
   //--------------------------------------------------------------
 
   // Lógica para criação do treino ou fechar modal------------------
-  constructor(private treinoService: TreinoService, private snackBar: MatSnackBar, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) { }
+
 
   criarTreino() {
 
     const treino: Treino = {
-        nome: this.modalidadeSelecionadoControl.value,
+        nome: this.getNomeModalidade(this.modalidadeSelecionadoControl.value),
         descricao: this.descricaoControl.value,
         alunos: [],
         datasTreinos: this.diasSelecionados().map(item => item.dataHorario),

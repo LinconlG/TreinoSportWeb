@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Treino } from 'src/app/models/treino.model';
 import { TreinoService } from 'src/app/services/treino/treino.service';
 import { DialogService } from 'src/app/services/dialog.service';
+import { Modalidade } from 'src/app/shared/enums/modalidade';
 @Component({
   selector: 'app-home-ct',
   imports: [CommonModule],
@@ -17,6 +18,7 @@ export class HomeCtComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string | null = null;
   constructor(private treinoService: TreinoService, private dialogService: DialogService, private snackBar: MatSnackBar) {}
+  modalidadesCriadas: Modalidade[] = [];
 
   ngOnInit(): void {
     this.carregarTreinos();// Quando o componente inicia, carrega os treinos
@@ -40,7 +42,8 @@ export class HomeCtComponent implements OnInit {
   }
 
   criarTreino(): void {
-    this.dialogService.abrirModalCriarTreino().subscribe({
+    this.modalidadesCriadas = this.treinos.map(treino => treino.modalidade);
+    this.dialogService.abrirModalCriarTreino(this.modalidadesCriadas).subscribe({
       next: (treino: Treino) => {
         if (treino) {
           this.requisicaoCriarTreino(treino);
