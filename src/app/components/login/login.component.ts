@@ -19,7 +19,9 @@ export class LoginComponent {
   senha: string = '';
   private jwtHelper = new JwtHelperService();
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private userState: UserStateService) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private userState: UserStateService) {
+    this.authService.setToken('');
+  }
 
   login(){
     this.authService.login(this.usuario, this.senha).subscribe({
@@ -62,9 +64,9 @@ export class LoginComponent {
 
   getUserType(): string | null {
     const claims = this.getTokenClaims();
-  if (claims.role) {
-    return claims.role as string;
-  }
+    if (claims.role) {
+      return claims.role as string;
+    }
 
     return null;
   }

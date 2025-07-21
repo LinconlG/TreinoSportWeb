@@ -10,7 +10,14 @@
           <span class="menu-name">Página inicial</span>
         </div>
       </a>
-      <!-- Adicione mais itens aqui -->
+
+      <a mat-list-item [routerLink]="loginPath" routerLinkActive="active" (click)="isMobile() && sidenavOpen.set(false)">
+        <div class="menu-label">
+          <img class="menu-icon" src="assets/images/logout1.png"/>
+          <span class="menu-name">Sair</span>
+        </div>
+      </a>
+
     </mat-nav-list>
   </mat-sidenav>
 

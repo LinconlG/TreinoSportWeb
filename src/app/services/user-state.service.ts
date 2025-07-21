@@ -20,4 +20,8 @@ export class UserStateService {
 
     return `/home/${type.toLowerCase()}`;
   }
+
+  getBaseLoginPath(): string {
+    return '/login';
+  }
 }

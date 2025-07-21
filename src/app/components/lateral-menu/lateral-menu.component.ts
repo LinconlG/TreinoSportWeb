@@ -27,33 +27,31 @@ import { filter } from 'rxjs/operators';
 })
 export class LateralMenuComponent {
   homePath: string;
+  loginPath: string;
   isMobile = signal(false);
   sidenavOpen = signal(false);
 
   constructor(
     private userState: UserStateService,
     private breakpointObserver: BreakpointObserver,
-    private router: Router
-  ) {
+    private router: Router) {
     this.homePath = this.userState.getBaseHomePath();
+    this.loginPath = this.userState.getBaseLoginPath();
 
     // Observar mudanças de tamanho de tela
-    this.breakpointObserver.observe(['(max-width: 768px)'])
-      .subscribe(result => {
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
         this.isMobile.set(result.matches);
         this.sidenavOpen.set(!result.matches);
-      });
+    });
 
     // Fechar menu ao navegar em mobile
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
         if (this.isMobile()) {
           this.sidenavOpen.set(false);
         }
-      });
+    });
 
-    // Reação a mudanças no userType
+      // Reação a mudanças no userType
     effect(() => {
       this.homePath = this.userState.getBaseHomePath();
     });
