@@ -1,1 +1,30 @@
-<p>gerenciamento-treino works!</p>
+<div class="div-principal">
+  <input type="text" placeholder="Adicione um aluno">
+
+    <div class="div-titulo">
+      <h4 style="margin: 0px;">Selecione um horário abaixo</h4>
+      <h4 style="margin: 0;">para visualizar a lista de presença</h4>
+    </div>
+
+    <div class="dias-selecionados">
+      <!--@for (diaSel of diasSelecionados(); track diaSel) { -->
+        <div class="dia-card">
+
+          <div class="dia-card-span">
+            <span>Segunda-feira</span>
+          </div>
+
+          <div class="horarioConjunto">
+            <!--@for (horario of diaSel.dataHorario.horarios; track horario) { -->
+              <span class="horarioIndividual">13:00</span>
+              <span class="horarioIndividual">14:00</span>
+              <span class="horarioIndividual">15:00</span>
+            <!--}-->
+          </div>
+
+        </div>
+      <!--}-->
+    </div>
+
+
+</div>
