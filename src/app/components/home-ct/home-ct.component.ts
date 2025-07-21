@@ -5,6 +5,7 @@ import { Treino } from 'src/app/models/treino.model';
 import { TreinoService } from 'src/app/services/treino/treino.service';
 import { DialogService } from 'src/app/services/dialog.service';
 import { Modalidade } from 'src/app/shared/enums/modalidade';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home-ct',
   imports: [CommonModule],
@@ -17,7 +18,7 @@ export class HomeCtComponent implements OnInit {
   treinos: Treino[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
-  constructor(private treinoService: TreinoService, private dialogService: DialogService, private snackBar: MatSnackBar) {}
+  constructor(private treinoService: TreinoService, private dialogService: DialogService, private snackBar: MatSnackBar, private router: Router) {}
   modalidadesCriadas: Modalidade[] = [];
 
   ngOnInit(): void {
@@ -75,6 +76,13 @@ export class HomeCtComponent implements OnInit {
     this.snackBar.open('Erro ao criar treino', 'Fechar', {
       duration: 3000,
       panelClass: ['error-snackbar']
+    });
+  }
+
+  gerenciarTreino(codigoTreino: number){
+    console.log(`clicou! ${codigoTreino}`)
+    this.router.navigate(['/gerenciamento/treino'], {
+      state: { data: codigoTreino  }
     });
   }
 

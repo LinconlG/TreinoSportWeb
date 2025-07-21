@@ -5,6 +5,7 @@ import { CadastroComponent } from './components/cadastro/cadastro.component';
 import { HomeCtComponent } from './components/home-ct/home-ct.component';
 import { HomeAlunoComponent } from './components/home-aluno/home-aluno.component';
 import { LateralMenuComponent } from './components/lateral-menu/lateral-menu.component';
+import { GerenciamentoTreinoComponent } from './components/gerenciamento-treino/gerenciamento-treino.component';
 
 export const routes: Routes = [
   {
@@ -15,7 +16,8 @@ export const routes: Routes = [
   {
     path: '', component: LateralMenuComponent, canActivate: [AuthGuard], children: [
       { path: 'home/ct', component: HomeCtComponent },
-      { path: 'home/aluno', component: HomeAlunoComponent }
+      { path: 'home/aluno', component: HomeAlunoComponent },
+      { path: 'gerenciamento/treino', component: GerenciamentoTreinoComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

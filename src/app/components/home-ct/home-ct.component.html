@@ -16,7 +16,7 @@
     <div class="lista-treinos">
       <div class="add-treino" (click)="criarTreino()"> <img src="../../../assets/images/plus.png"> </div>
       <div *ngFor="let treino of treinos" class="treino-card">
-        <div class="treino-nome">{{ treino.nome }}</div>
+        <div (click)="gerenciarTreino(treino.codigo)" class="treino-nome">{{ treino.nome }}</div>
       </div>
     </div>
   </div>

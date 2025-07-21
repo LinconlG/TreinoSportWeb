@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../auth.service';
 import { CommonModule } from '@angular/common';
-import { JwtHelperService } from '@auth0/angular-jwt';
+
 import { UserStateService } from '../../services/user-state.service';
 
 @Component({
@@ -17,7 +17,7 @@ import { UserStateService } from '../../services/user-state.service';
 export class LoginComponent {
   usuario: string = '';
   senha: string = '';
-  private jwtHelper = new JwtHelperService();
+
 
   constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private userState: UserStateService) {
     this.authService.setToken('');
@@ -27,8 +27,8 @@ export class LoginComponent {
     this.authService.login(this.usuario, this.senha).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        var tipo = this.getUserType() as "CT" | "Aluno";
-        this.userState.setUserType(tipo);
+        this.userState.setUserType();
+        var tipo = this.userState.userType();
         if(tipo == 'CT'){
           this.router.navigate(['/home/ct'])
         } else if (tipo == 'Aluno') {
@@ -49,25 +49,5 @@ export class LoginComponent {
     this.router.navigate(['/cadastro'])
   }
 
-  getTokenClaims(): any {
-    const token = this.authService.getToken();
-    if (!token) return null;
 
-    try {
-      var claims = this.jwtHelper.decodeToken(token);
-      return this.jwtHelper.decodeToken(token);
-    } catch (error) {
-      console.error('Error decoding token', error);
-      return null;
-    }
-  }
-
-  getUserType(): string | null {
-    const claims = this.getTokenClaims();
-    if (claims.role) {
-      return claims.role as string;
-    }
-
-    return null;
-  }
 }
