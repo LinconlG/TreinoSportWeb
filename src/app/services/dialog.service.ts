@@ -4,6 +4,7 @@ import { CriarTreinoComponent } from '../components/modals/criar-treino/criar-tr
 import { Observable } from 'rxjs';
 import { Treino } from '../models/treino.model';
 import { Modalidade } from '../shared/enums/modalidade';
+import { ListaPresencaComponent } from '../components/modals/lista-presenca/lista-presenca.component';
 
 
 @Injectable({
@@ -22,6 +23,18 @@ export class DialogService {
       autoFocus: false, // Desabilita o foco automático no primeiro campo
       restoreFocus: true, // Restaura o foco corretamente
       data: modalidadesCriadas
+    }).afterClosed();
+  }
+
+  abrirModalListaPresenca(codigoTreino: number, dia: number, codigoHorario: number) {
+    return this.dialog.open(ListaPresencaComponent, {
+      width: '30vw',
+      maxWidth: '30vw',
+      height: '40vh',
+      disableClose: true, // Desabilita o fechamento ao clicar fora do modal
+      autoFocus: false, // Desabilita o foco automático no primeiro campo
+      restoreFocus: true, // Restaura o foco corretamente
+      data: { codigoTreino, dia, codigoHorario}
     }).afterClosed();
   }
 }
