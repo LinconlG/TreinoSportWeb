@@ -1,30 +1,42 @@
 <div class="div-principal">
-  <input type="text" placeholder="Adicione um aluno">
 
-    <div class="div-titulo">
+  <div class="div-titulo">
+      <h4 style="margin: 0px;">Adicionar aluno</h4>
+  </div>
+
+  <input type="text" placeholder="digite o usuário">
+
+  <div class="div-titulo">
+      <h4 style="margin: 0px;">Alunos inscritos no treino</h4>
+  </div>
+
+  <div class="lista-nomes">
+
+  </div>
+
+
+  <div class="div-titulo">
       <h4 style="margin: 0px;">Selecione um horário abaixo</h4>
       <h4 style="margin: 0;">para visualizar a lista de presença</h4>
-    </div>
+  </div>
 
-    <div class="dias-selecionados">
-      <!--@for (diaSel of diasSelecionados(); track diaSel) { -->
+  <div class="dias-selecionados">
+      @for (dia of diasTreinos; track dia) {
         <div class="dia-card">
 
           <div class="dia-card-span">
-            <span>Segunda-feira</span>
+            <span>{{getNomeDia(dia.dia)}}</span>
           </div>
 
           <div class="horarioConjunto">
-            <!--@for (horario of diaSel.dataHorario.horarios; track horario) { -->
-              <span class="horarioIndividual">13:00</span>
-              <span class="horarioIndividual">14:00</span>
-              <span class="horarioIndividual">15:00</span>
-            <!--}-->
+            @for (horario of dia.horarios; track horario) {
+              <span (click)="abrirListaPresenca(dia.dia, horario.codigo)" class="horarioIndividual">{{horario.hora | date:'HH:mm' }}</span>
+            }
           </div>
 
         </div>
-      <!--}-->
-    </div>
+      }
+  </div>
 
 
 </div>
