@@ -81,6 +81,20 @@ export class TreinoService {
     });
   }
 
+  putTreinoAluno(codigoTreino: number, email: string): Observable<void>  {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams()
+    .set('codigoTreino', codigoTreino)
+    .set('emailAluno', email);
+    return this.http.put<void>(`${this.apiUrl}/alunos`, null, {
+      params: params,
+      headers: headers
+    });
+  }
+
   createTreino(treino: Treino): Observable<void> {
     console.log(this.token);
     console.log(treino);

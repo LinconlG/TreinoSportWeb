@@ -4,14 +4,19 @@
       <h4 style="margin: 0px;">Adicionar aluno</h4>
   </div>
 
-  <input type="text" placeholder="digite o usuário">
+    <input [formControl]="emailAluno" type="text" placeholder="digite o email do aluno">
+    <button (click)="adicionarAluno(emailAluno.value)" style="margin-left: 40px;">Adicionar</button>
+
+
 
   <div class="div-titulo">
-      <h4 style="margin: 0px;">Alunos inscritos no treino</h4>
+    <h4 style="margin: 0px;">Alunos inscritos no treino</h4>
   </div>
 
   <div class="lista-nomes">
-
+    @for (aluno of alunos; track aluno) {
+      <div>{{aluno.nome}}</div>
+    }
   </div>
 
 
