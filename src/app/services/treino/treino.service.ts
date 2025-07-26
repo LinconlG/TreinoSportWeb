@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/enviroment";
 import { Treino } from "../../models/treino.model";
+import { Conta } from "src/app/models/conta.model";
 import { AuthService } from "../../auth.service";
 
 @Injectable({
@@ -38,6 +39,46 @@ export class TreinoService {
 
   getTreino(id: number): Observable<Treino> {
     return this.http.get<Treino>(`${this.apiUrl}/${id}`);
+  }
+
+  getTreinoGerenciamento(codigoTreino: number): Observable<Treino> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams().set('codigoTreino', codigoTreino);
+    return this.http.get<Treino>(`${this.apiUrl}/gerenciamento/especifico`, {
+      params: params,
+      headers: headers
+    });
+  }
+
+  getTreinoPresentes(codigoTreino: number, dia: number, codigoHorario: number): Observable<Conta[]> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams()
+    .set('codigoTreino', codigoTreino)
+    .set('codigoDia', dia)
+    .set('codigoHorario', codigoHorario);
+    return this.http.get<Conta[]>(`${this.apiUrl}/presentes`, {
+      params: params,
+      headers: headers
+    });
+  }
+
+  getTreinoAlunos(codigoTreino: number): Observable<Conta[]> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams()
+    .set('codigoTreino', codigoTreino);
+    return this.http.get<Conta[]>(`${this.apiUrl}/alunos`, {
+      params: params,
+      headers: headers
+    });
   }
 
   createTreino(treino: Treino): Observable<void> {

@@ -1,0 +1,28 @@
+.lista-nomes{
+  width: 250px;
+  height: 150px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow: auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-left: 5px;
+}
+
+.container{
+  display: grid;
+  gap: 10px;
+}
+
+.fechar{
+  display: flex;
+  justify-content: end;
+  font-size: larger;
+  font-weight: bolder;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+button{
+  width: 100px;
+}

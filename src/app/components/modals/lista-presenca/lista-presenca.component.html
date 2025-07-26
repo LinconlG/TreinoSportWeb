@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="fechar">
+    <button (click)="fechar()">Fechar</button>
+  </div>
+  <div class="lista-nomes">
+    @for (aluno of alunosPresentes; track aluno) {
+    <div>
+      {{aluno.nome}}
+    </div>
+    }
+  </div>
+</div>
+
