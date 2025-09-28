@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Treino } from '../models/treino.model';
 import { Modalidade } from '../shared/enums/modalidade';
 import { ListaPresencaComponent } from '../components/modals/lista-presenca/lista-presenca.component';
+import { ConfirmacaoComponent } from '../components/modals/confirmacao/confirmacao.component';
 
 
 @Injectable({
@@ -35,6 +36,18 @@ export class DialogService {
       autoFocus: false, // Desabilita o foco automático no primeiro campo
       restoreFocus: true, // Restaura o foco corretamente
       data: { codigoTreino, dia, codigoHorario}
+    }).afterClosed();
+  }
+
+    abrirConfirmacao(message: string = 'tem certeza?') : Observable<boolean> {
+    return this.dialog.open(ConfirmacaoComponent, {
+      width: '30vw',
+      maxWidth: '30vw',
+      height: '30vh',
+      disableClose: true, // Desabilita o fechamento ao clicar fora do modal
+      autoFocus: false, // Desabilita o foco automático no primeiro campo
+      restoreFocus: true, // Restaura o foco corretamente
+      data: { message }
     }).afterClosed();
   }
 }

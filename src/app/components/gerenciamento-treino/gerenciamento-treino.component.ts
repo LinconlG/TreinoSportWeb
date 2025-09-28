@@ -88,5 +88,20 @@ export class GerenciamentoTreinoComponent {
         });
   }
 
-
+  deletarTreino(){
+    this.dialogService.abrirConfirmacao("Tem certeza que deseja DELETAR este treino?")
+    .subscribe(result => {
+      if (result){
+        this.treinoService.deleteTreino(this.codigoTreino).subscribe({
+          next: () => {
+            this.router.navigate(['/home/ct']);
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+      }
+    });
+  }
 }
+

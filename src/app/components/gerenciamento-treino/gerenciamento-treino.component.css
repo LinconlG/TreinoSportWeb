@@ -74,3 +74,14 @@
   margin: 5px;
   padding: 5px;
 }
+
+.deletar-treino{
+  display: flex;
+  justify-content: center;
+  height: 52px;
+}
+
+.linha-separar{
+  background-color: black;
+  height: 2px;
+}

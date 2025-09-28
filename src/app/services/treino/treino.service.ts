@@ -105,4 +105,17 @@ export class TreinoService {
 
     return this.http.put<void>(`${this.apiUrl}/ct/criar`, treino, { headers: headers });
   }
+
+  deleteTreino(codigoTreino: number): Observable<void>  {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders ({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams()
+    .set('codigoTreino', codigoTreino);
+    return this.http.delete<void>(`${this.apiUrl}/ct/detalhes`, {
+      params: params,
+      headers: headers
+    });
+  }
 }
