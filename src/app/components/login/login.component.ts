@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../auth.service';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,7 @@ import { UserStateService } from '../../services/user-state.service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

@@ -1,0 +1,46 @@
+<div class="buscar-cts">
+  <h2>Buscar Centros de Treinamento</h2>
+
+  <div *ngIf="!localizacaoNegada()" class="localizacao-info">
+    <p>📍 Usando sua localização atual. Raio: {{ raio }} km</p>
+  </div>
+
+  <div *ngIf="localizacaoNegada()" class="cep-fallback">
+    <p>Localização não disponível. Informe seu CEP para buscar CTs próximos:</p>
+    <div class="cep-input-row">
+      <input [(ngModel)]="cep" placeholder="CEP (somente números)" maxlength="9" />
+      <button (click)="buscarPorCep()">Buscar</button>
+    </div>
+    <p *ngIf="cidadeViaCep()" class="cidade-confirmacao">📌 {{ cidadeViaCep() }}</p>
+  </div>
+
+  <div class="filtros">
+    <label>Raio:
+      <select [(ngModel)]="raio" (ngModelChange)="buscar()">
+        <option [value]="10">10 km</option>
+        <option [value]="20">20 km</option>
+        <option [value]="50">50 km</option>
+      </select>
+    </label>
+    <label>Modalidade:
+      <input [(ngModel)]="modalidadeFiltro" (ngModelChange)="aplicarFiltro()" placeholder="Filtrar modalidade..." />
+    </label>
+  </div>
+
+  <div *ngIf="isLoading()" class="spinner">🔄 Buscando CTs...</div>
+  <div *ngIf="erro()" class="erro">⚠️ {{ erro() }}</div>
+
+  <div class="resultados" *ngIf="!isLoading()">
+    <div class="ct-card" *ngFor="let ct of resultadosFiltrados">
+      <h3>{{ ct.nome }}</h3>
+      <p class="distancia">📍 {{ ct.distanciaKm | number:'1.1-1' }} km</p>
+      <p class="descricao">{{ ct.descricao }}</p>
+      <div class="modalidades">
+        <span class="chip" *ngFor="let m of ct.modalidades">{{ m }}</span>
+      </div>
+    </div>
+    <div *ngIf="resultadosFiltrados.length === 0" class="vazio">
+      Nenhum CT encontrado neste raio.
+    </div>
+  </div>
+</div>

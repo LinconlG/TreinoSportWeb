@@ -1,121 +1,104 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { environment } from "src/environments/enviroment";
 import { Treino } from "../../models/treino.model";
 import { Conta } from "src/app/models/conta.model";
-import { AuthService } from "../../auth.service";
+import { DataHorario } from "src/app/models/dataHorario";
+import { ApiService } from "../api.service";
+import { UserStateService } from "../user-state.service";
 
 @Injectable({
   providedIn: "root"
 })
 
 export class TreinoService {
-  private apiUrl = environment.apiUrl + "/treino";
-  private token: string;
-  private headers: HttpHeaders;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
-    this.token = this.authService.getToken();
-    this.headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`
-    });
-  }
-
-
+  constructor(private api: ApiService, private userState: UserStateService) {}
 
   getTreinos(): Observable<Treino[]> {
-    // 1. Define os queryParams
-    //const params = new HttpParams().set('codigoCT', codigoCT);
-
-    // 2. Faz a requisição com as opções
-    return this.http.get<Treino[]>(
-      `${this.apiUrl}/ct/todos`,
-      {
-        headers: this.headers  // Envia o token no header
-      }
-    );
+    return this.api.get<Treino[]>('treino/ct/todos');
   }
 
   getTreino(id: number): Observable<Treino> {
-    return this.http.get<Treino>(`${this.apiUrl}/${id}`);
+    return this.api.get<Treino>(`treino/${id}`);
   }
 
   getTreinoGerenciamento(codigoTreino: number): Observable<Treino> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
     const params = new HttpParams().set('codigoTreino', codigoTreino);
-    return this.http.get<Treino>(`${this.apiUrl}/gerenciamento/especifico`, {
-      params: params,
-      headers: headers
-    });
+    return this.api.get<Treino>('treino/gerenciamento/especifico', params);
   }
 
   getTreinoPresentes(codigoTreino: number, dia: number, codigoHorario: number): Observable<Conta[]> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
     const params = new HttpParams()
-    .set('codigoTreino', codigoTreino)
-    .set('codigoDia', dia)
-    .set('codigoHorario', codigoHorario);
-    return this.http.get<Conta[]>(`${this.apiUrl}/presentes`, {
-      params: params,
-      headers: headers
-    });
+      .set('codigoTreino', codigoTreino)
+      .set('codigoDia', dia)
+      .set('codigoHorario', codigoHorario);
+    return this.api.get<Conta[]>('treino/presentes', params);
   }
 
   getTreinoAlunos(codigoTreino: number): Observable<Conta[]> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
     const params = new HttpParams()
-    .set('codigoTreino', codigoTreino);
-    return this.http.get<Conta[]>(`${this.apiUrl}/alunos`, {
-      params: params,
-      headers: headers
-    });
+      .set('codigoTreino', codigoTreino);
+    return this.api.get<Conta[]>('treino/alunos', params);
   }
 
-  putTreinoAluno(codigoTreino: number, email: string): Observable<void>  {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
+  putTreinoAluno(codigoTreino: number, email: string): Observable<void> {
     const params = new HttpParams()
-    .set('codigoTreino', codigoTreino)
-    .set('emailAluno', email);
-    return this.http.put<void>(`${this.apiUrl}/alunos`, null, {
-      params: params,
-      headers: headers
-    });
+      .set('codigoTreino', codigoTreino)
+      .set('emailAluno', email);
+    return this.api.put<void>('treino/alunos', null, params);
   }
 
   createTreino(treino: Treino): Observable<void> {
-    console.log(this.token);
-    console.log(treino);
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.put<void>(`${this.apiUrl}/ct/criar`, treino, { headers: headers });
+    return this.api.put<void>('treino/ct/criar', treino);
   }
 
-  deleteTreino(codigoTreino: number): Observable<void>  {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders ({
-      'Authorization': `Bearer ${token}`
-    });
+  deleteTreino(codigoTreino: number): Observable<void> {
     const params = new HttpParams()
-    .set('codigoTreino', codigoTreino);
-    return this.http.delete<void>(`${this.apiUrl}/ct/detalhes`, {
-      params: params,
-      headers: headers
-    });
+      .set('codigoTreino', codigoTreino);
+    return this.api.delete<void>('treino/ct/detalhes', params);
+  }
+
+  // Task 8.1: pass codigoUsuario from JWT claims
+  getTreinosAluno(): Observable<Treino[]> {
+    const claims = this.userState.getTokenClaims();
+    const params = new HttpParams().set('codigoUsuario', claims?.CodigoConta ?? 0);
+    return this.api.get<Treino[]>('treino/aluno/todos', params);
+  }
+
+  atualizarTreino(treino: Treino): Observable<void> {
+    return this.api.patch<void>('treino/ct/detalhes', treino);
+  }
+
+  // Task 8.3: codigoTreino as query param, datasTreinos as body
+  atualizarHorarios(codigoTreino: number, datasTreinos: DataHorario[]): Observable<void> {
+    const params = new HttpParams().set('codigoTreino', codigoTreino);
+    return this.api.patch<void>('treino/ct/horarios', datasTreinos, params);
+  }
+
+  // Task 8.2: use codigoAluno (number) and send datasTreinos as body
+  marcarPresenca(codigoTreino: number, codigoAluno: number, codigoDia: number, codigoHorario: number, datasTreinos: DataHorario[]): Observable<void> {
+    const params = new HttpParams()
+      .set('codigoTreino', codigoTreino)
+      .set('codigoAluno', codigoAluno)
+      .set('codigoDia', codigoDia)
+      .set('codigoHorario', codigoHorario);
+    return this.api.patch<void>('treino/aluno/presenca/marcar', datasTreinos, params);
+  }
+
+  removerPresenca(codigoTreino: number, codigoAluno: number, codigoDia: number, codigoHorario: number, datasTreinos: DataHorario[]): Observable<void> {
+    const params = new HttpParams()
+      .set('codigoTreino', codigoTreino)
+      .set('codigoAluno', codigoAluno)
+      .set('codigoDia', codigoDia)
+      .set('codigoHorario', codigoHorario);
+    return this.api.patch<void>('treino/aluno/presenca/remover', datasTreinos, params);
+  }
+
+  removerAluno(codigoTreino: number, codigoConta: number): Observable<void> {
+    const params = new HttpParams()
+      .set('codigoTreino', codigoTreino)
+      .set('codigoConta', codigoConta);
+    return this.api.delete<void>('treino/alunos', params);
   }
 }

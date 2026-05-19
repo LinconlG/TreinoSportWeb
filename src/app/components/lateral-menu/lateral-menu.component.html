@@ -11,7 +11,21 @@
         </div>
       </a>
 
-      <a mat-list-item [routerLink]="loginPath" routerLinkActive="active" (click)="isMobile() && sidenavOpen.set(false)">
+      @if (isAluno) {
+      <a mat-list-item routerLink="/buscar-cts" routerLinkActive="active" (click)="isMobile() && sidenavOpen.set(false)">
+        <div class="menu-label">
+          <span class="menu-name">🔍 Buscar CTs</span>
+        </div>
+      </a>
+      }
+
+      <a mat-list-item routerLink="/perfil" routerLinkActive="active" (click)="isMobile() && sidenavOpen.set(false)">
+        <div class="menu-label">
+          <span class="menu-name">👤 Meu Perfil</span>
+        </div>
+      </a>
+
+      <a mat-list-item (click)="logout()">
         <div class="menu-label">
           <img class="menu-icon" src="assets/images/logout1.png"/>
           <span class="menu-name">Sair</span>

@@ -12,11 +12,32 @@
     <div class="input-cadastro">
 
       <input formControlName="nome" type="text" placeholder="Nome">
+      <span class="erro-campo" *ngIf="form.get('nome')?.invalid && (form.get('nome')?.dirty || form.get('nome')?.touched)">
+        Nome é obrigatório.
+      </span>
+
       <input formControlName="email" type="email" placeholder="Email">
+      <span class="erro-campo" *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)">
+        <span *ngIf="form.get('email')?.errors?.['required']">Email é obrigatório.</span>
+        <span *ngIf="form.get('email')?.errors?.['email']">Email inválido.</span>
+      </span>
+
       <input formControlName="senha" type="password" placeholder="Senha">
+      <span class="erro-campo" *ngIf="form.get('senha')?.invalid && (form.get('senha')?.dirty || form.get('senha')?.touched)">
+        <span *ngIf="form.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+        <span *ngIf="form.get('senha')?.errors?.['minlength']">Senha deve ter no mínimo 6 caracteres.</span>
+      </span>
 
       <div *ngIf="form.get('isCentroTreinamento')?.value">
         <textarea formControlName="descricao" class="richText" type="text" placeholder="Descrição"></textarea>
+
+        <input formControlName="cep" type="text" placeholder="CEP (ex: 00000-000)">
+
+        <div class="localizacao-div">
+          <input formControlName="latitude" type="number" placeholder="Latitude (opcional)">
+          <input formControlName="longitude" type="number" placeholder="Longitude (opcional)">
+          <button type="button" (click)="usarLocalizacao()">📍 Usar minha localização</button>
+        </div>
       </div>
     </div>
 

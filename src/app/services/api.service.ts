@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "../../environments/enviroment";
+import { environment } from "../../environments/environment";
 
 @Injectable({ providedIn: 'root'})
 export class ApiService {
@@ -25,8 +25,16 @@ export class ApiService {
     return this.http.post<T>(`${this.apiUrl}/${endpoint}`, body);
   }
 
-  put<T>(endpoint: string, body: any) {
-    return this.http.put<T>(`${this.apiUrl}/${endpoint}`, body);
+  put<T>(endpoint: string, body: any, params?: HttpParams) {
+    return this.http.put<T>(`${this.apiUrl}/${endpoint}`, body, { params });
+  }
+
+  delete<T>(endpoint: string, params?: HttpParams) {
+    return this.http.delete<T>(`${this.apiUrl}/${endpoint}`, { params });
+  }
+
+  patch<T>(endpoint: string, body: any, params?: HttpParams) {
+    return this.http.patch<T>(`${this.apiUrl}/${endpoint}`, body, { params });
   }
 
 }

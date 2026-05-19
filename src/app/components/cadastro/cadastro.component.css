@@ -49,6 +49,8 @@ input{
   font-family: Arial, sans-serif;
 }
 
+.erro-campo { color: red; font-size: 0.8rem; display: block; margin-top: 2px; }
+
 .botao{
   width: 200px;
   max-width: 300px;

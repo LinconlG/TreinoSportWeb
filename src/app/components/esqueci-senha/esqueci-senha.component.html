@@ -1,0 +1,66 @@
+<div class="esqueci-senha-container">
+  <h2>Recuperar Senha</h2>
+
+  <!-- Step 1: Email -->
+  @if (currentStep === 1) {
+    <form [formGroup]="step1Form" (ngSubmit)="enviarEmail()">
+      <p>Informe seu email para receber o código de recuperação.</p>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="seu@email.com">
+        <mat-error *ngIf="step1Form.get('email')?.errors?.['required']">Email é obrigatório.</mat-error>
+        <mat-error *ngIf="step1Form.get('email')?.errors?.['email']">Email inválido.</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Enviando...' : 'Enviar código' }}
+      </button>
+    </form>
+  }
+
+  <!-- Step 2: Token -->
+  @if (currentStep === 2) {
+    <form [formGroup]="step2Form" (ngSubmit)="verificarToken()">
+      <p>Insira o código enviado para o seu email.</p>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Código de verificação</mat-label>
+        <input matInput formControlName="token" placeholder="Código recebido por email">
+        <mat-error *ngIf="step2Form.get('token')?.errors?.['required']">Código é obrigatório.</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Verificando...' : 'Verificar código' }}
+      </button>
+    </form>
+  }
+
+  <!-- Step 3: New password -->
+  @if (currentStep === 3) {
+    <form [formGroup]="step3Form" (ngSubmit)="redefinirSenha()">
+      <p>Defina sua nova senha.</p>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nova Senha</mat-label>
+        <input matInput formControlName="novaSenha" type="password" placeholder="Mínimo 6 caracteres">
+        <mat-error *ngIf="step3Form.get('novaSenha')?.errors?.['required']">Senha é obrigatória.</mat-error>
+        <mat-error *ngIf="step3Form.get('novaSenha')?.errors?.['minlength']">Mínimo 6 caracteres.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirmar Nova Senha</mat-label>
+        <input matInput formControlName="confirmarSenha" type="password" placeholder="Repita a nova senha">
+        <mat-error *ngIf="step3Form.get('confirmarSenha')?.errors?.['required']">Confirmação é obrigatória.</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Salvando...' : 'Redefinir senha' }}
+      </button>
+    </form>
+  }
+
+  <div class="voltar-login">
+    <a routerLink="/login">Voltar ao login</a>
+  </div>
+</div>

@@ -26,14 +26,16 @@ export class CriarTreinoComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public modalidadesCriadas: Modalidade[], private snackBar: MatSnackBar, private dialogRef: MatDialogRef<CriarTreinoComponent>, private overlayContainer: OverlayContainer) { }
 
+  private nextHorarioId = 1;
+
   horaSelecionada: string;
 
   modalidades = Object.values(Modalidade);
   selectedModalidade: Modalidade | null = null;
   modalidadesRestantes: Modalidade[];
-  modalidadeSelecionadoControl = new FormControl< Modalidade | null>(null);
+  modalidadeSelecionadoControl = new FormControl<Modalidade | null>(null, Validators.required);
   descricaoControl = new FormControl< string | null>(null);
-  limiteControl = new FormControl< number | null>(null);
+  limiteControl = new FormControl<number | null>(null, Validators.required);
 
   ngOnInit(): void {
     this.modalidadesRestantes = this.modalidades.filter(
@@ -128,7 +130,7 @@ export class CriarTreinoComponent {
     horaDate.setHours(hours, minutes, 0, 0); // Configura apenas hora e minuto
 
     const horario: Horario = {
-      codigo: data.horarios.length + 1,
+      codigo: this.nextHorarioId++,
       hora: horaDate,
       alunosPresentes: []
     };
@@ -146,6 +148,12 @@ export class CriarTreinoComponent {
 
 
   criarTreino() {
+    this.modalidadeSelecionadoControl.markAsTouched();
+    this.limiteControl.markAsTouched();
+
+    if (!this.modalidadeSelecionadoControl.value || !this.limiteControl.value) {
+      return;
+    }
 
     const treino: Treino = {
         nome: this.getNomeModalidade(this.modalidadeSelecionadoControl.value),

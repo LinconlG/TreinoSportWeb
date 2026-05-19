@@ -3,11 +3,21 @@
     <button (click)="fechar()">Fechar</button>
   </div>
   <div class="lista-nomes">
+    <h4>Presentes</h4>
     @for (aluno of alunosPresentes; track aluno) {
-    <div>
+    <div class="aluno-row">
       {{aluno.nome}}
+      <button *ngIf="isCT" (click)="removerPresenca(aluno)">Remover</button>
     </div>
+    }
+    @if (isCT && alunosAusentes.length > 0) {
+    <h4>Adicionar presença</h4>
+    @for (aluno of alunosAusentes; track aluno) {
+    <div class="aluno-row">
+      {{aluno.nome}}
+      <button (click)="adicionarPresenca(aluno)">Adicionar</button>
+    </div>
+    }
     }
   </div>
 </div>
-

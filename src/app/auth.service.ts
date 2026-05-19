@@ -1,22 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from "../environments/enviroment";
+import { ApiService } from './services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private api: ApiService) { }
 
   login(email: string, senha: string) : Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`,
-       { email, senha },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    return this.api.post<{ token: string }>('login', { email, senha });
   }
 
   setToken(token: string) : void {

@@ -6,7 +6,9 @@ import { DataHorario } from 'src/app/models/dataHorario';
 import { DiasSemana } from 'src/app/shared/enums/diasSemana';
 import { DialogService } from 'src/app/services/dialog.service';
 import { Conta } from 'src/app/models/conta.model';
+import { Treino } from 'src/app/models/treino.model';
 import { FormControl, ReactiveFormsModule  } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-gerenciamento-treino',
@@ -20,7 +22,7 @@ export class GerenciamentoTreinoComponent {
   alunos: Conta[];
   emailAluno = new FormControl<string | null>(null);
 
-  constructor(private router:Router, private treinoService:TreinoService, private dialogService:DialogService){
+  constructor(private router:Router, private treinoService:TreinoService, private dialogService:DialogService, private snackBar: MatSnackBar){
     try{
       const nav = this.router.getCurrentNavigation();
       this.codigoTreino = nav.extras.state?.['data'];
@@ -78,7 +80,7 @@ export class GerenciamentoTreinoComponent {
   }
 
   abrirListaPresenca(dia: number, codigoHorario: number){
-        this.dialogService.abrirModalListaPresenca(this.codigoTreino, dia, codigoHorario).subscribe({
+        this.dialogService.abrirModalListaPresenca(this.codigoTreino, dia, codigoHorario, this.diasTreinos).subscribe({
           next: () => {
 
           },
@@ -102,6 +104,48 @@ export class GerenciamentoTreinoComponent {
         });
       }
     });
+  }
+
+  editarTreino(): void {
+    this.treinoService.getTreinoGerenciamento(this.codigoTreino).subscribe({
+      next: (treino) => {
+        this.dialogService.abrirEditarTreino(treino).subscribe({
+          next: (result) => {
+            if (result) {
+              this.treinoService.atualizarTreino(result as Treino).subscribe({
+                next: () => this.buscarDias(this.codigoTreino),
+                error: (e) => console.error(e)
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
+  atualizarHorarios(): void {
+    this.treinoService.atualizarHorarios(this.codigoTreino, this.diasTreinos).subscribe({
+      next: () => this.buscarDias(this.codigoTreino),
+      error: (e) => console.error(e)
+    });
+  }
+
+  removerAluno(codigoConta: number): void {
+    this.dialogService.abrirConfirmacao('Tem certeza que deseja remover este aluno?')
+      .subscribe(result => {
+        if (result) {
+          this.treinoService.removerAluno(this.codigoTreino, codigoConta).subscribe({
+            next: () => {
+              this.buscarAlunos(this.codigoTreino);
+              this.snackBar.open('Aluno removido com sucesso!', 'Fechar', { duration: 3000 });
+            },
+            error: (error) => {
+              console.error(error);
+              this.snackBar.open('Erro ao remover aluno.', 'Fechar', { duration: 3000 });
+            }
+          });
+        }
+      });
   }
 }
 

@@ -27,7 +27,6 @@ import { filter } from 'rxjs/operators';
 })
 export class LateralMenuComponent {
   homePath: string;
-  loginPath: string;
   isMobile = signal(false);
   sidenavOpen = signal(false);
 
@@ -36,7 +35,6 @@ export class LateralMenuComponent {
     private breakpointObserver: BreakpointObserver,
     private router: Router) {
     this.homePath = this.userState.getBaseHomePath();
-    this.loginPath = this.userState.getBaseLoginPath();
 
     // Observar mudanças de tamanho de tela
     this.breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
@@ -59,6 +57,15 @@ export class LateralMenuComponent {
 
   toggleSidenav() {
     this.sidenavOpen.update(open => !open);
+  }
+
+  get isAluno(): boolean {
+    return this.userState.getUserType() === 'Aluno';
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }
 

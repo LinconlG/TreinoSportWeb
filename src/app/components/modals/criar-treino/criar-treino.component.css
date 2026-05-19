@@ -1,3 +1,5 @@
+.erro-campo { color: red; font-size: 0.8rem; display: block; margin-top: 2px; }
+
 .principal{
   display: grid;
   justify-content: center;

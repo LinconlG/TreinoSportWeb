@@ -7,7 +7,7 @@
     <input type="password" placeholder="Senha" [(ngModel)]="senha" (keyup.enter)="login()">
   </div>
 
-  <a href="#" class="esqueci-senha">Esqueci minha senha</a>
+  <a routerLink="/esqueci-senha" class="esqueci-senha">Esqueci minha senha</a>
   <button class="botao" (click)="login()">Login</button>
   <button class="botao" (click)="cadastrarTela()">Cadastrar</button>
 </div>

@@ -10,6 +10,9 @@
           </mat-option>
         </div>
       </mat-select>
+      <mat-error *ngIf="modalidadeSelecionadoControl.invalid && modalidadeSelecionadoControl.touched">
+        Selecione uma modalidade.
+      </mat-error>
     </mat-form-field>
 
     <textarea class="descricao-global" placeholder="Descrição do treino" matInput [formControl]="descricaoControl"></textarea>
@@ -21,6 +24,9 @@
     <div class="limite">
             <input matInput [formControl]="limiteControl" type="number" style="width: 50px;">
     </div>
+    <span class="erro-campo" *ngIf="limiteControl.invalid && limiteControl.touched">
+      Informe o limite de alunos.
+    </span>
 
     <mat-form-field>
       <mat-label>Dias de treino</mat-label>

@@ -1,1 +1,28 @@
-<p>home-aluno works!</p>
+<div class="home-aluno">
+  <div class="header">
+    <h2>Meus Treinos</h2>
+    <button class="btn-buscar-cts" (click)="buscarCTs()">🔍 Buscar CTs</button>
+  </div>
+
+  <input class="filtro-input" [(ngModel)]="filtro" (ngModelChange)="filtrar()" placeholder="Filtrar por nome ou modalidade..." />
+
+  <div *ngIf="isLoading()" class="loading">Carregando...</div>
+  <div *ngIf="erro()" class="erro">{{ erro() }}</div>
+
+  <div class="treinos-grid" *ngIf="!isLoading()">
+    <div class="treino-card" *ngFor="let treino of treinosFiltrados">
+      <h3>{{ treino.nome }}</h3>
+      <span class="modalidade-chip">{{ treino.modalidade }}</span>
+      <p class="descricao">{{ treino.descricao }}</p>
+      <div class="dias">
+        <span *ngFor="let d of treino.datasTreinos" class="dia-tag">
+          {{ getNomeDia(d.dia) }}
+          <span *ngFor="let h of d.horarios" class="hora-tag">{{ h.hora | date:'HH:mm' }}</span>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="treinosFiltrados.length === 0 && !isLoading()" class="vazio">
+      Nenhum treino encontrado.
+    </div>
+  </div>
+</div>

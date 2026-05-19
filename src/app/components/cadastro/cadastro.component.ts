@@ -33,30 +33,52 @@ export class CadastroComponent {
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       descricao: [''],
-      isCentroTreinamento: [false]
+      isCentroTreinamento: [false],
+      cep: [{ value: '', disabled: true }],
+      latitude: [{ value: null, disabled: true }],
+      longitude: [{ value: null, disabled: true }]
     });
 
     this.form.get('isCentroTreinamento')?.valueChanges.subscribe(value => {
       this.conta.isCentroTreinamento = value;
     });
 
-    this.form.get('isCentroTreinamento')?.valueChanges.subscribe(mostrar => {//caso o valor do checkbox mude
-      const campo = this.form.get('campoAdicional');
-      if (mostrar) {
-        campo?.enable(); // Habilita o campo
-        campo?.setValidators([Validators.required]); // Torna obrigatório
-      } else {
-        campo?.disable(); // Desabilita o campo
-        campo?.clearValidators(); // Remove validação
-        campo?.reset(); // Limpa o valor
-      }
-      campo?.updateValueAndValidity(); // Atualiza estado de validação
+    this.form.get('isCentroTreinamento')?.valueChanges.subscribe(mostrar => {
+      const campos = ['cep', 'latitude', 'longitude'];
+      campos.forEach(campo => {
+        const ctrl = this.form.get(campo);
+        if (mostrar) {
+          ctrl?.enable();
+        } else {
+          ctrl?.disable();
+          ctrl?.reset();
+        }
+      });
     });
 
   }
 
+  usarLocalizacao(): void {
+    if (!navigator.geolocation) {
+      this.snackBar.open('Geolocalização não suportada pelo navegador.', 'Fechar', { duration: 3000 });
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this.form.patchValue({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        });
+      },
+      () => {
+        this.snackBar.open('Não foi possível obter a localização.', 'Fechar', { duration: 3000 });
+      }
+    );
+  }
+
   cadastrar(){
-    if (this.carregando()) return; // Evita múltiplos submits
+    this.form.markAllAsTouched();
+    if (this.form.invalid || this.carregando()) return; // Evita múltiplos submits
 
     this.carregando.set(true);
     this.erro.set(null);
@@ -66,6 +88,9 @@ export class CadastroComponent {
     this.conta.senha = this.form.get('senha')?.value;
     this.conta.descricao = this.form.get('descricao')?.value;
     this.conta.isCentroTreinamento = this.form.get('isCentroTreinamento')?.value;
+    this.conta.cep = this.form.get('cep')?.value || undefined;
+    this.conta.latitude = this.form.get('latitude')?.value ?? undefined;
+    this.conta.longitude = this.form.get('longitude')?.value ?? undefined;
 
     this.usuarioService.cadastrar(this.conta).subscribe({
       next: (response) => {

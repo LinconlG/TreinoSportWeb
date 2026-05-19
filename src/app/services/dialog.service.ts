@@ -6,6 +6,8 @@ import { Treino } from '../models/treino.model';
 import { Modalidade } from '../shared/enums/modalidade';
 import { ListaPresencaComponent } from '../components/modals/lista-presenca/lista-presenca.component';
 import { ConfirmacaoComponent } from '../components/modals/confirmacao/confirmacao.component';
+import { EditarTreinoComponent } from '../components/modals/editar-treino/editar-treino.component';
+import { DataHorario } from '../models/dataHorario';
 
 
 @Injectable({
@@ -27,7 +29,7 @@ export class DialogService {
     }).afterClosed();
   }
 
-  abrirModalListaPresenca(codigoTreino: number, dia: number, codigoHorario: number) {
+  abrirModalListaPresenca(codigoTreino: number, dia: number, codigoHorario: number, datasTreinos: DataHorario[] = []) {
     return this.dialog.open(ListaPresencaComponent, {
       width: '30vw',
       maxWidth: '30vw',
@@ -35,7 +37,7 @@ export class DialogService {
       disableClose: true, // Desabilita o fechamento ao clicar fora do modal
       autoFocus: false, // Desabilita o foco automático no primeiro campo
       restoreFocus: true, // Restaura o foco corretamente
-      data: { codigoTreino, dia, codigoHorario}
+      data: { codigoTreino, dia, codigoHorario, datasTreinos }
     }).afterClosed();
   }
 
@@ -48,6 +50,18 @@ export class DialogService {
       autoFocus: false, // Desabilita o foco automático no primeiro campo
       restoreFocus: true, // Restaura o foco corretamente
       data: { message }
+    }).afterClosed();
+  }
+
+  abrirEditarTreino(treino: Treino): Observable<Treino | false> {
+    return this.dialog.open(EditarTreinoComponent, {
+      width: '60vw',
+      maxWidth: '60vw',
+      height: '60vh',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: true,
+      data: treino
     }).afterClosed();
   }
 }

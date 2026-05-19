@@ -5,4 +5,7 @@ export interface Conta{
   senha?: string;
   descricao?: string;
   isCentroTreinamento?: boolean;
+  cep?: string;
+  latitude?: number;
+  longitude?: number;
 }

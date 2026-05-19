@@ -15,7 +15,10 @@
 
   <div class="lista-nomes">
     @for (aluno of alunos; track aluno) {
-      <div>{{aluno.nome}}</div>
+      <div class="aluno-item">
+        <span>{{aluno.nome}}</span>
+        <button class="btn-remover-aluno" (click)="removerAluno(aluno.codigo)" title="Remover aluno">×</button>
+      </div>
     }
   </div>
 
@@ -42,8 +45,10 @@
         </div>
       }
   </div>
+  <button (click)="atualizarHorarios()">Salvar Horários</button>
   <div class="linha-separar"></div>
   <div class="deletar-treino">
+      <button (click)="editarTreino()">Editar Treino</button>
       <img (click)="deletarTreino()" src="../../../assets/images/trash.png">
   </div>
 
